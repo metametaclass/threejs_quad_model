@@ -5,7 +5,8 @@
   "main": "convert.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "convert": "node convert.js"
+    "convert": "node convert.js",
+    "q": "node quaternions.js"
   },
   "author": "",
   "license": "ISC",
