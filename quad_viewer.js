@@ -3,7 +3,7 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );        
+document.body.appendChild( renderer.domElement );
 
 
 const light = new THREE.AmbientLight( 0xC0C0C0 ); // soft white light
@@ -92,12 +92,12 @@ console.log(THREE.AnimationClip.toJSON(clip_hardcoded));
 */
 
                 mixer = new THREE.AnimationMixer(quad);
-                mixer.addEventListener( 'loop', function( e ) { 
-                    console.log('loop', e);  
+                mixer.addEventListener( 'loop', function( e ) {
+                    console.log('loop', e);
                 }); // properties of e: type, action and loopDelta
 
                 mixer.addEventListener( 'finished', function( e ) {
-                    console.log('finished', e); 
+                    console.log('finished', e);
                 }); // properties of e: type, action and direction
 
                 const clipAction = mixer.clipAction( clips[0] );//.setLoop(THREE.LoopOnce);
@@ -114,7 +114,7 @@ console.log(THREE.AnimationClip.toJSON(clip_hardcoded));
             function ( err ) {
                 console.error( 'An error happened', err );
             }
-        ); 
+        );
 
     },
 
