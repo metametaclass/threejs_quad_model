@@ -23,8 +23,28 @@ document.body.appendChild( renderer.domElement );
 const light = new THREE.AmbientLight( 0xC0C0C0 ); // soft white light
 scene.add( light );
 
-const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+//const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+//scene.add( light );
+
+/*
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 10 );
+directionalLight.position.set( 10, 10, 10 );//.normalize();
 scene.add( directionalLight );
+
+const helper = new THREE.DirectionalLightHelper( directionalLight, 5 );
+scene.add( helper );
+*/
+//
+
+const pointLight = new THREE.PointLight( 0xFFFFFF, 1, 100 );
+pointLight.position.set( 10, 10, 10 );
+scene.add( pointLight );
+
+//const sphereSize = 1;
+//const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
+//scene.add( pointLightHelper );
+
+
 
 const controls = new THREE.OrbitControls( camera, renderer.domElement );
 camera.position.set( 0, 5, 10 );
@@ -38,7 +58,7 @@ const cube = new THREE.Mesh( geometry, material );
 
 camera.position.z = 10;
 
-
+var quad = null;
 
 //const loader = new THREE.ObjectLoader();
 //const loader = new THREE.JSONLoader();
@@ -53,6 +73,7 @@ loader.load(
     // Here the loaded data is assumed to be an object
     function ( obj ) {
         // Add the loaded object to the scene
+        quad = obj.scene;
         scene.add( obj.scene );
     },
 
@@ -73,6 +94,9 @@ function animate() {
 
     //cube.rotation.x += 0.01;
     //cube.rotation.y += 0.01;
+    if(quad) {
+      quad.rotation.y += 0.01;
+    }
 
     controls.update();
     renderer.render( scene, camera );
