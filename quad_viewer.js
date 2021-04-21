@@ -92,7 +92,15 @@ console.log(THREE.AnimationClip.toJSON(clip_hardcoded));
 */
 
                 mixer = new THREE.AnimationMixer(quad);
-                const clipAction = mixer.clipAction( clips[0] );
+                mixer.addEventListener( 'loop', function( e ) { 
+                    console.log('loop', e);  
+                }); // properties of e: type, action and loopDelta
+
+                mixer.addEventListener( 'finished', function( e ) {
+                    console.log('finished', e); 
+                }); // properties of e: type, action and direction
+
+                const clipAction = mixer.clipAction( clips[0] );//.setLoop(THREE.LoopOnce);
                 clipAction.play();
 
             },
@@ -140,6 +148,7 @@ function animate() {
 
     if ( mixer ) {
         mixer.update( delta );
+        //console.log(mixer.time);
     }
     renderer.render( scene, camera );
 }
