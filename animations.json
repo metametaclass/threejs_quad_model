@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Action",
+    "duration": 2,
+    "tracks": [
+        {
+            "name": ".position",
+            "times": [
+                0, 1, 2
+            ],
+            "values": [
+                0, 0, 0,
+                30, 0, 0,
+                0, 0, 0
+            ],
+            "type": "vector"
+        },
+        {
+            "name": ".quaternion",
+            "times": [
+                0, 1, 2
+            ],
+            "values": [
+                0, 0, 0, 1,
+                1, 0, 0, 0,
+                0, 0, 0, 1
+            ],
+            "type": "quaternion"
+        }
+    ],
+    "uuid": "CFE16954-EA0D-40E6-8F43-4C7A8BE9B359",
+    "blendMode": 2500   
+  }
+]
+
+

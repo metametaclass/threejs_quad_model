@@ -50,9 +50,14 @@ var quad = null;
 //const loader = new THREE.JSONLoader();
 const loader = new THREE.GLTFLoader();
 
+clock = new THREE.Clock();
+
+const animationLoader = new THREE.AnimationLoader();
+
+var mixer = null;
+
 loader.load(
     // resource URL
-    //"quad_x.json",
     "quad_x.gltf",
 
     // onLoad callback
@@ -61,6 +66,48 @@ loader.load(
         // Add the loaded object to the scene
         quad = obj.scene;
         scene.add( obj.scene );
+
+
+        animationLoader.load(
+            // resource URL
+            "animations.json",
+
+            // onLoad callback
+            // Here the loaded data is assumed to be an object
+            function ( clips ) {
+                // Add the loaded object to the scene
+                console.log(clips);
+
+/*
+// POSITION
+const positionKF = new THREE.VectorKeyframeTrack( '.position', [ 0, 1, 2 ], [ 0, 0, 0, 30, 0, 0, 0, 0, 0 ] );
+
+const xAxis = new THREE.Vector3( 1, 0, 0 );
+const qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
+const qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
+const quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+
+const clip_hardcoded = new THREE.AnimationClip( 'Action', -1, [ positionKF, quaternionKF] );
+console.log(THREE.AnimationClip.toJSON(clip_hardcoded));
+*/
+
+                mixer = new THREE.AnimationMixer(quad);
+                const clipAction = mixer.clipAction( clips[0] );
+                clipAction.play();
+
+            },
+
+            // onProgress callback
+            function ( xhr ) {
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            },
+
+            // onError callback
+            function ( err ) {
+                console.error( 'An error happened', err );
+            }
+        ); 
+
     },
 
     // onProgress callback
@@ -70,9 +117,12 @@ loader.load(
 
     // onError callback
     function ( err ) {
-        console.error( 'An error happened' );
+        console.error( 'An error happened', err );
     }
 );
+
+
+
 
 
 function animate() {
@@ -80,11 +130,17 @@ function animate() {
 
     //cube.rotation.x += 0.01;
     //cube.rotation.y += 0.01;
-    if(quad) {
-      quad.rotation.y += 0.01;
-    }
+    //if(quad) {
+    //  quad.rotation.y += 0.01;
+    //}
 
     controls.update();
+
+    const delta = clock.getDelta();
+
+    if ( mixer ) {
+        mixer.update( delta );
+    }
     renderer.render( scene, camera );
 }
 animate();
