@@ -93,11 +93,11 @@ console.log(THREE.AnimationClip.toJSON(clip_hardcoded));
 
                 mixer = new THREE.AnimationMixer(quad);
                 mixer.addEventListener( 'loop', function( e ) {
-                    console.log('loop', e);
+                    //console.log('loop', e);
                 }); // properties of e: type, action and loopDelta
 
                 mixer.addEventListener( 'finished', function( e ) {
-                    console.log('finished', e);
+                    //console.log('finished', e);
                 }); // properties of e: type, action and direction
 
                 const clipAction = mixer.clipAction( clips[0] );//.setLoop(THREE.LoopOnce);
