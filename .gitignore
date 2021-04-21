@@ -1,0 +1,5 @@
+node_modules
+convert_json3_to_gltf/*.gltf
+convert_json3_to_gltf/quad_x.json
+
+

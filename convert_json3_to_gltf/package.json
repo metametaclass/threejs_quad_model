@@ -1,0 +1,17 @@
+{
+  "name": "convert_json3_to_gltf",
+  "version": "0.1.0",
+  "description": "convert legacy three.js json to gltf format",
+  "main": "convert.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "convert": "node convert.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.7.0",
+    "three": "^0.110.0",
+    "vblob": "^1.0.2"
+  }
+}
