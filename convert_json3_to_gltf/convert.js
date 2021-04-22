@@ -16,88 +16,94 @@ if ( process.argv.length <= 2 ) {
 
 }
 
-var file = process.argv[ 2 ];
-var optimize = process.argv.indexOf( '--optimize' ) > 0;
-var resourceDirectory = THREE.LoaderUtils.extractUrlBase( file );
+try {
+   var file = process.argv[ 2 ];
+   var optimize = process.argv.indexOf( '--optimize' ) > 0;
+   var resourceDirectory = THREE.LoaderUtils.extractUrlBase( file );
 
-//
+   //
 
-// Patch global scope to imitate browser environment.
-global.window = global;
-global.Blob = Blob;
-global.FileReader = FileReader;
-global.THREE = THREE;
-global.document = {
-    createElement: ( nodeName ) => {
+   // Patch global scope to imitate browser environment.
+   global.window = global;
+   global.Blob = Blob;
+   global.FileReader = FileReader;
+   global.THREE = THREE;
+   global.document = {
+       createElement: ( nodeName ) => {
 
-        if ( nodeName !== 'canvas' ) throw new Error( `Cannot create node ${nodeName}` );
+           if ( nodeName !== 'canvas' ) throw new Error( `Cannot create node ${nodeName}` );
 
-        const canvas = new Canvas( 256, 256 );
-        // This isn't working — currently need to avoid toBlob(), so export to embedded .gltf not .glb.
-        // canvas.toBlob = function () {
-        //   return new Blob([this.toBuffer()]);
-        // };
-        return canvas;
+           const canvas = new Canvas( 256, 256 );
+           // This isn't working — currently need to avoid toBlob(), so export to embedded .gltf not .glb.
+           // canvas.toBlob = function () {
+           //   return new Blob([this.toBuffer()]);
+           // };
+           return canvas;
 
-    }
-};
+       }
+   };
 
-//
+   //
 
-// Load legacy JSON file and construct a mesh.
+   // Load legacy JSON file and construct a mesh.
 
-var jsonContent = fs.readFileSync( file, 'utf8' );
-var loader = new THREE.LegacyJSONLoader();
-var { geometry, materials } = loader.parse( JSON.parse( jsonContent ), resourceDirectory );
+   var jsonContent = fs.readFileSync( file, 'utf8' );
+   var loader = new THREE.LegacyJSONLoader();
+   var { geometry, materials } = loader.parse( JSON.parse( jsonContent ), resourceDirectory );
 
-var mesh;
-var boneDefs = geometry.bones || [];
-var animations = geometry.animations || [];
-var hasVertexColors = geometry.colors.length > 0;
+   var mesh;
+   var boneDefs = geometry.bones || [];
+   var animations = geometry.animations || [];
+   var hasVertexColors = geometry.colors.length > 0;
 
-geometry = new THREE.BufferGeometry().fromGeometry( geometry );
+   geometry = new THREE.BufferGeometry().fromGeometry( geometry );
 
-// Remove unnecessary vertex colors and groups added during BufferGeometry conversion.
-if ( ! hasVertexColors ) geometry.removeAttribute( 'color' );
-if ( geometry.groups.length === 1 ) geometry.clearGroups();
+   // Remove unnecessary vertex colors and groups added during BufferGeometry conversion.
+   if ( ! hasVertexColors ) geometry.removeAttribute( 'color' );
+   if ( geometry.groups.length === 1 ) geometry.clearGroups();
 
-if ( ! materials ) {
+   if ( ! materials ) {
 
-    materials = new THREE.MeshStandardMaterial( { color: 0x888888, roughness: 1, metalness: 0 } );
+       materials = new THREE.MeshStandardMaterial( { color: 0x888888, roughness: 1, metalness: 0 } );
 
+   }
+
+   if ( optimize ) {
+
+       geometry = THREE.BufferGeometryUtils.mergeVertices( geometry );
+
+   }
+
+   if ( boneDefs.length ) {
+
+       var { roots, bones } = initBones( boneDefs );
+       mesh = new THREE.SkinnedMesh( geometry, materials );
+       roots.forEach( ( bone ) => mesh.add( bone ) );
+       mesh.updateMatrixWorld( true );
+       mesh.bind( new THREE.Skeleton( bones ), mesh.matrixWorld );
+       mesh.normalizeSkinWeights();
+
+   } else {
+
+       mesh = new THREE.Mesh( geometry, materials );
+
+   }
+
+   //
+
+   // Export to glTF.
+   var exporter = new THREE.GLTFExporter();
+   exporter.parse( mesh, ( json ) => {
+
+       var content = JSON.stringify( json );
+       fs.writeFileSync( path.basename( file, '.json' ) + '.gltf', content, 'utf8' );
+
+   }, { binary: false, animations } );
+
+} catch (e) {
+  console.log(e);
+  process.exit( - 1 );
 }
-
-if ( optimize ) {
-
-    geometry = THREE.BufferGeometryUtils.mergeVertices( geometry );
-
-}
-
-if ( boneDefs.length ) {
-
-    var { roots, bones } = initBones( boneDefs );
-    mesh = new THREE.SkinnedMesh( geometry, materials );
-    roots.forEach( ( bone ) => mesh.add( bone ) );
-    mesh.updateMatrixWorld( true );
-    mesh.bind( new THREE.Skeleton( bones ), mesh.matrixWorld );
-    mesh.normalizeSkinWeights();
-
-} else {
-
-    mesh = new THREE.Mesh( geometry, materials );
-
-}
-
-//
-
-// Export to glTF.
-var exporter = new THREE.GLTFExporter();
-exporter.parse( mesh, ( json ) => {
-
-    var content = JSON.stringify( json );
-    fs.writeFileSync( path.basename( file, '.json' ) + '.gltf', content, 'utf8' );
-
-}, { binary: false, animations } );
 
 //
 
@@ -153,3 +159,4 @@ function initBones( boneDefs ) {
     return { roots, bones };
 
 }
+
