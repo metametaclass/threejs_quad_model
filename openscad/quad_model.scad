@@ -21,14 +21,23 @@ standoff_offset = 4;
 
 battery_up=false;
 
-color("#404040") 
+color_carbon = "#404040";
+
+color(color_carbon) 
   plate(0);
 
-color("#404040") 
+color(color_carbon) 
   plate(frame_height);
   
-color("#404040") 
+color(color_carbon) 
   plate(-arm_thickness-plate_thickness);  
+
+color(color_carbon) 
+ arm(90-angle/2);
+
+color(color_carbon) 
+ arm(90+angle/2);
+
 
 x_standoff = frame_width/2-standoff_offset;
 y_standoff = frame_length/2-standoff_offset;
@@ -39,11 +48,6 @@ standoff(-x_standoff, -y_standoff, 0);
 standoff(-x_standoff, y_standoff, 0);
 
 
-color("#404040") 
- arm(90-angle/2);
-
-color("#404040") 
- arm(90+angle/2);
 
 stack();
 battery(battery_up, -20);
@@ -70,22 +74,25 @@ module plate(z) {
 };
 
 module motor_prop(m) {
+    color("#203040")
     translate(m)
       cylinder(12, d=25);
     
+    color("#F0F0F0")
     translate([m[0],m[1],m[2]+12])
       cylinder(5, d=125);
     
 };
 
 module standoff(x,y,z) {
+    color("#00C0C0") 
     translate([x,y,z])
      cylinder(h=frame_height, d=5);
 };
 
 
 module stack() {
-    color("green")
+    color("#006000")
     translate([-15,-15, 0])
     cube([30,30, frame_height-plate_thickness]);
 };
