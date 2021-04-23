@@ -1,4 +1,6 @@
 # %%
+import sys
+import os
 import numpy as np
 import trimesh
 import pyglet
@@ -8,7 +10,7 @@ import pyglet
 #trimesh.util.attach_to_log()
 
 # %%
-mesh = trimesh.load('quad_model.off')
+mesh = trimesh.load(sys.argv[1])
 
 # %%
 # is the current mesh watertight?
@@ -24,9 +26,10 @@ print(mesh.volume)
 
 print(mesh.volume / mesh.convex_hull.volume)
 
-print(mesh.moment_inertia)
-print(mesh.principal_inertia_components)
-print(mesh.principal_inertia_vectors)
+
+print("moment_inertia", mesh.moment_inertia)
+print("principal_inertia_components", mesh.principal_inertia_components)
+print("principal_inertia_vectors", mesh.principal_inertia_vectors)
 
 #%% 
 mesh.vertices -= mesh.center_mass
@@ -43,8 +46,9 @@ q = trimesh.transformations.quaternion_multiply(qy, qz)
 
 t = trimesh.transformations.quaternion_matrix(q)
 
-mesh.apply_transform(t)
+#mesh.apply_transform(t)
 
+print("after transform:")
 print(mesh.moment_inertia)
 print(mesh.principal_inertia_components)
 print(mesh.principal_inertia_vectors)
@@ -53,11 +57,15 @@ for facet in mesh.facets:
     mesh.visual.face_colors[facet] = [192, 128, 192, 0]
 
 # %%
-with open("quad_model.glb", 'wb') as f:
+name_prefix,ext = os.path.splitext(sys.argv[1])
+#name_prefix = os.path.basename(name_prefix)
+
+
+with open(name_prefix+".glb", 'wb') as f:
     f.write(trimesh.exchange.gltf.export_glb(mesh))
     #, include_normals=True
 
-with open("quad_model_export.stl", 'wb') as f:
+with open(name_prefix+".stl", 'wb') as f:
     f.write(trimesh.exchange.stl.export_stl(mesh))
     #, include_normals=True
 
