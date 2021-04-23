@@ -31,7 +31,9 @@ print(mesh.principal_inertia_vectors)
 #%% 
 mesh.vertices -= mesh.center_mass
 #mesh.vertices *= 0.05
-#mesh.rotate()
+
+
+#rotate mode to NED axis
 origin, xaxis, yaxis, zaxis = [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]
 
 #qx = trimesh.transformations.quaternion_about_axis(alpha, xaxis)
