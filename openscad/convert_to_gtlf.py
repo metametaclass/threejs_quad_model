@@ -30,8 +30,18 @@ print(mesh.principal_inertia_vectors)
 
 #%% 
 mesh.vertices -= mesh.center_mass
-mesh.vertices *= 0.05
+#mesh.vertices *= 0.05
 #mesh.rotate()
+origin, xaxis, yaxis, zaxis = [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]
+
+#qx = trimesh.transformations.quaternion_about_axis(alpha, xaxis)
+qy = trimesh.transformations.quaternion_about_axis(np.pi, yaxis)
+qz = trimesh.transformations.quaternion_about_axis(np.pi/2, zaxis)
+q = trimesh.transformations.quaternion_multiply(qy, qz)
+
+t = trimesh.transformations.quaternion_matrix(q)
+
+mesh.apply_transform(t)
 
 print(mesh.moment_inertia)
 print(mesh.principal_inertia_components)

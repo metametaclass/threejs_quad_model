@@ -1,3 +1,8 @@
+const defaultSize = 300;
+const axesSize = defaultSize;
+
+const cameraOffset = defaultSize;
+
 //setup renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -11,7 +16,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x303030);
 
 //coordinates axis helper
-const axesHelper = new THREE.AxesHelper(10);
+const axesHelper = new THREE.AxesHelper(axesSize);
 scene.add(axesHelper);
 
 
@@ -25,29 +30,33 @@ scene.add(light);
 
 //directional light
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(0, -20, 20);//.normalize();
+directionalLight.position.set(-defaultSize * 2, 0, -defaultSize * 2);//.normalize();
 scene.add(directionalLight);
 
-const helper = new THREE.DirectionalLightHelper(directionalLight, 5);
+const helper = new THREE.DirectionalLightHelper(directionalLight, defaultSize / 2);
 scene.add(helper);
 
 //point light
 const pointLight = new THREE.PointLight(0xFFFFFF, 1, 100);
-pointLight.position.set(10, 10, 10);
+pointLight.position.set(-defaultSize, defaultSize, -defaultSize);
 scene.add(pointLight);
 
 //point light helper
-const sphereSize = 1;
+const sphereSize = defaultSize / 10;
 const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
 scene.add(pointLightHelper);
 
 //camera
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, defaultSize * 10);
 
-//set Z axis up
-camera.up.set(0, 0, 1);
+//const camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
+
+//set Z axis down, XYZ=NED coordinated system
+camera.up.set(0, 0, -1);
+
 //view from behind-right
-camera.position.set(10, -10, 10);
+//camera.position.set(-defaultSize, defaultSize / 2, -defaultSize * 0.866);
+camera.position.set(-defaultSize, defaultSize / 2, -defaultSize);
 
 //camera controls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -78,7 +87,8 @@ loader.load(
 
         animationLoader.load(
             // resource URL
-            "animations_tennis_racket_effect.json",
+            //"animations_tennis_racket_effect.json",
+            "animations_tennis_racket_effect_ned.json",
             //"animations.json",
 
             // onLoad callback
