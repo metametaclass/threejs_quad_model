@@ -75,7 +75,9 @@ var mixer = null;
 loader.load(
     // resource URL
     //"quad_x.gltf",
-    "openscad/quad_model.glb",
+    //"openscad/quad_model.glb",
+    "openscad/handle.glb",
+    //"openscad/3d_cross.glb",
 
     // onLoad callback
     // Here the loaded data is assumed to be an object
@@ -88,7 +90,8 @@ loader.load(
         animationLoader.load(
             // resource URL
             //"animations_tennis_racket_effect.json",
-            "animations_tennis_racket_effect.json",
+            "animations_handle.json",
+            //"animations_3d_cross.json",
             //"animations.json",
 
             // onLoad callback
