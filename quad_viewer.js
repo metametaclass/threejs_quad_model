@@ -88,7 +88,7 @@ loader.load(
         animationLoader.load(
             // resource URL
             //"animations_tennis_racket_effect.json",
-            "animations_tennis_racket_effect_ned.json",
+            "animations_tennis_racket_effect.json",
             //"animations.json",
 
             // onLoad callback
