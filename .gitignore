@@ -1,5 +1,9 @@
 node_modules
 convert_json3_to_gltf/*.gltf
 convert_json3_to_gltf/quad_x.json
-
-
+openscad/*.bin
+openscad/*.gltf
+openscad/*.json
+openscad/*.csg
+openscad/*.stl
+openscad/*.off

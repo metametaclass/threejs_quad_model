@@ -46,7 +46,7 @@ q = trimesh.transformations.quaternion_multiply(qy, qz)
 
 t = trimesh.transformations.quaternion_matrix(q)
 
-#mesh.apply_transform(t)
+mesh.apply_transform(t)
 
 print("after transform:")
 print(mesh.moment_inertia)
@@ -63,6 +63,12 @@ name_prefix,ext = os.path.splitext(sys.argv[1])
 
 with open(name_prefix+".glb", 'wb') as f:
     f.write(trimesh.exchange.gltf.export_glb(mesh))
+    #, include_normals=True
+
+# export gltf files
+for k,v in trimesh.exchange.gltf.export_gltf(mesh).items():
+    with open(name_prefix+"_"+k, 'wb') as f:
+        f.write(v)
     #, include_normals=True
 
 with open(name_prefix+".stl", 'wb') as f:
