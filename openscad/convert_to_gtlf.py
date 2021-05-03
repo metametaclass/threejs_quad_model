@@ -54,6 +54,7 @@ print(mesh.principal_inertia_components)
 print(mesh.principal_inertia_vectors)
 
 for facet in mesh.facets:
+    #print(facet)
     mesh.visual.face_colors[facet] = [192, 128, 192, 0]
 
 # %%
@@ -62,11 +63,11 @@ name_prefix,ext = os.path.splitext(sys.argv[1])
 
 
 with open(name_prefix+".glb", 'wb') as f:
-    f.write(trimesh.exchange.gltf.export_glb(mesh))
+    f.write(trimesh.exchange.gltf.export_glb(mesh, include_normals=True))
     #, include_normals=True
 
 # export gltf files
-for k,v in trimesh.exchange.gltf.export_gltf(mesh).items():
+for k,v in trimesh.exchange.gltf.export_gltf(mesh, include_normals=True).items():
     with open(name_prefix+"_"+k, 'wb') as f:
         f.write(v)
     #, include_normals=True
@@ -74,6 +75,10 @@ for k,v in trimesh.exchange.gltf.export_gltf(mesh).items():
 with open(name_prefix+".stl", 'wb') as f:
     f.write(trimesh.exchange.stl.export_stl(mesh))
     #, include_normals=True
+
+trimesh.exchange.export.export_mesh(mesh, name_prefix+"_mesh.json")
+# with open(name_prefix+".stl", 'wb') as f:
+#     f.write()
 
 # %%
 #mesh.show()
