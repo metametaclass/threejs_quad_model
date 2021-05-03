@@ -38,6 +38,7 @@ color(color_carbon)
 color(color_carbon) 
  arm(90+angle/2);
 
+//$fn = 12;
 
 x_standoff = frame_width/2-standoff_offset;
 y_standoff = frame_length/2-standoff_offset;
