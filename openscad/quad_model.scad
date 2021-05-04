@@ -23,20 +23,12 @@ battery_up=false;
 
 color_carbon = "#404040";
 
-color(color_carbon) 
-  plate(0);
+plate(0);
+plate(frame_height);
+plate(-arm_thickness-plate_thickness);  
 
-color(color_carbon) 
-  plate(frame_height);
-  
-color(color_carbon) 
-  plate(-arm_thickness-plate_thickness);  
-
-color(color_carbon) 
- arm(90-angle/2);
-
-color(color_carbon) 
- arm(90+angle/2);
+arm(90-angle/2);
+arm(90+angle/2);
 
 //$fn = 12;
 
@@ -64,23 +56,25 @@ motor_prop([-x,-y,z]);
 
 
 module arm(rotation){
+ color(color_carbon) 
  rotate([0,0, rotation]) 
   translate([-arm_length/2, -arm_width/2, - arm_thickness]) 
     cube([arm_length, arm_width, arm_thickness]);
 }
 
 module plate(z) {
+    color(color_carbon) 
         translate([-frame_width/2,-frame_length/2,z]) 
            cube([frame_width, frame_length, plate_thickness]);    
 };
 
 module motor_prop(m) {
     color("#203040")
-    translate(m)
+    translate([m[0],m[1],m[2]+2])
       cylinder(12, d=25);
     
-    color("#F0F0F0")
-    translate([m[0],m[1],m[2]+12])
+    # color("#F0F0F0")
+    translate([m[0],m[1],m[2]+16])
       cylinder(5, d=125);
     
 };
