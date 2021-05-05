@@ -22,6 +22,15 @@ standoff_offset = 4;
 battery_up=false;
 
 color_carbon = "#404040";
+//g/cm3
+carbon_density = 2;
+standoff_density = 2.7;
+//g
+stack_weight = 18;
+battery_weight = 180;
+gopro_weight = 116;
+motor_weight = 33.3;
+prop_weight = 20;
 
 plate(0);
 plate(frame_height);
@@ -56,45 +65,45 @@ motor_prop([-x,-y,z]);
 
 
 module arm(rotation){
- color(color_carbon) 
+ color(color_carbon, name="carbon", density=carbon_density) 
  rotate([0,0, rotation]) 
   translate([-arm_length/2, -arm_width/2, - arm_thickness]) 
     cube([arm_length, arm_width, arm_thickness]);
 }
 
 module plate(z) {
-    color(color_carbon) 
+    color(color_carbon, name="carbon", density=carbon_density) 
         translate([-frame_width/2,-frame_length/2,z]) 
            cube([frame_width, frame_length, plate_thickness]);    
 };
 
 module motor_prop(m) {
-    color("#203040")
+    color("#203040", name="motor", weight=motor_weight)
     translate([m[0],m[1],m[2]+2])
       cylinder(12, d=25);
     
-    # color("#F0F0F0")
+    # color("#F0F0F0", name="prop", weight=prop_weight)
     translate([m[0],m[1],m[2]+16])
       cylinder(5, d=125);
     
 };
 
 module standoff(x,y,z) {
-    color("#00C0C0") 
+    color("#00C0C0", name="standoff", density=standoff_density) 
     translate([x,y,z])
      cylinder(h=frame_height, d=5);
 };
 
 
 module stack() {
-    color("#006000")
+    color("#006000", name="stack", weight=stack_weight)
     translate([-15,-15, 0])
     cube([30,30, frame_height-plate_thickness]);
 };
 
 
 module battery(up, y_shift) {
-    color("#400000")
+    color("#400000", name="battery", weight=battery_weight)
         
     translate([-battery_width/2,y_shift-battery_length/2, up ? (frame_height) : (-battery_height-arm_thickness-plate_thickness)])
     cube([battery_width, battery_length, battery_height]);
@@ -102,7 +111,7 @@ module battery(up, y_shift) {
 
 
 module gopro(y_offset, camera_angle) {
-    color("#606060")
+    color("#606060", name="gopro", weight=gopro_weight)
     
     translate([-30, y_offset-25, frame_height+plate_thickness])
      rotate([camera_angle, 0, 0])    
