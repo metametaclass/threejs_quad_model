@@ -75,7 +75,10 @@ var mixer = null;
 loader.load(
     // resource URL
     //"quad_x.gltf",
-    "openscad/quad_model.glb",
+    //"openscad/quad_model.glb",
+    "openscad/quad_model_scad.glb",
+    //"openscad/3d_cross.gltf ",
+    
     //"openscad/handle.glb",
     //"openscad/3d_cross.glb",
 
