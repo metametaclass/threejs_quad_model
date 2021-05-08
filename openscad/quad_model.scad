@@ -30,7 +30,7 @@ stack_weight = 18;
 battery_weight = 180;
 gopro_weight = 116;
 motor_weight = 33.3;
-prop_weight = 20;
+prop_weight = 3.8;
 
 plate(0);
 plate(frame_height);
